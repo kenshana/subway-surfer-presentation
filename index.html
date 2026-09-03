@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subway Surfers - Interactive Presentation Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-content">
+                <h1 class="logo">🚇 SUBWAY SURFERS</h1>
+                <div class="nav-buttons">
+                    <button class="nav-btn active" onclick="showSection('home')">Home</button>
+                    <button class="nav-btn" onclick="showSection('game')">Play Game</button>
+                    <button class="nav-btn" onclick="showSection('content')">Info</button>
+                    <button class="nav-btn" onclick="showSection('leaderboard')">Scores</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="hero">
+                <div class="animated-background"></div>
+                <div class="hero-content">
+                    <h2 class="hero-title">SUBWAY SURFERS</h2>
+                    <p class="hero-subtitle">Interactive Presentation & Game</p>
+                    <div class="character-container">
+                        <div class="character">🏃</div>
+                        <div class="coin">💰</div>
+                        <div class="train">🚆</div>
+                    </div>
+                    <p class="hero-description">Run, jump, dodge obstacles and collect coins while learning through interactive content!</p>
+                    <button class="cta-button" onclick="showSection('game')">START SURFING 🎮</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Section -->
+        <section id="game" class="section">
+            <div class="game-wrapper">
+                <!-- Game Stats -->
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span>Score: <strong id="game-score">0</strong></span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Coins: <strong id="game-coins">0</strong></span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Distance: <strong id="game-distance">0</strong>m</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Level: <strong id="game-level">1</strong></span>
+                    </div>
+                </div>
+
+                <!-- Game Canvas -->
+                <div class="game-container">
+                    <canvas id="gameCanvas" width="400" height="600"></canvas>
+                    
+                    <!-- Game Controls -->
+                    <div class="game-controls">
+                        <button class="control-btn" id="jump-btn">JUMP ⬆️</button>
+                        <div class="direction-controls">
+                            <button class="arrow-btn" id="left-btn">⬅️</button>
+                            <button class="arrow-btn" id="right-btn">➡️</button>
+                        </div>
+                        <button class="control-btn" id="pause-btn">PAUSE ⏸️</button>
+                    </div>
+
+                    <!-- Keyboard Hint -->
+                    <p class="control-hint">Use Arrow Keys to Move • Space to Jump • P to Pause</p>
+                </div>
+
+                <!-- Slide Popup -->
+                <div id="slide-popup" class="popup hidden">
+                    <div class="popup-content">
+                        <button class="close-btn" onclick="closeSlidePopup()">✕</button>
+                        <h3 id="popup-title">Presentation Slide</h3>
+                        <div id="popup-text" class="popup-text"></div>
+                        <button class="continue-btn" onclick="closeSlidePopup()">Continue Playing ➜</button>
+                    </div>
+                </div>
+
+                <!-- Game Over Popup -->
+                <div id="game-over" class="popup hidden">
+                    <div class="popup-content game-over-content">
+                        <h2>GAME OVER!</h2>
+                        <div class="final-stats">
+                            <p>Final Score: <span id="final-score">0</span></p>
+                            <p>Coins Collected: <span id="final-coins">0</span></p>
+                            <p>Distance: <span id="final-distance">0</span>m</p>
+                        </div>
+                        <button class="cta-button" onclick="restartGame()">Play Again 🎮</button>
+                        <button class="cta-button secondary" onclick="backToMenu()">Back to Menu 🏠</button>
+                    </div>
+                </div>
+
+                <!-- Paused Popup -->
+                <div id="paused" class="popup hidden">
+                    <div class="popup-content">
+                        <h2>PAUSED</h2>
+                        <p style="margin: 2rem 0;">Game paused. Press RESUME or P to continue.</p>
+                        <button class="cta-button" onclick="togglePause()">Resume Game ▶️</button>
+                        <button class="cta-button secondary" onclick="backToMenu()">Back to Menu 🏠</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Section -->
+        <section id="content" class="section">
+            <div class="content-wrapper">
+                <div class="slide-container">
+                    <div class="slide active" id="slide-0">
+                        <div class="slide-content">
+                            <h3>Welcome to Subway Surfers Presentation</h3>
+                            <p>Play the game to unlock presentation content! Collect 100 coins to see the next slide.</p>
+                            <textarea id="slide-0-text" class="editable-text" placeholder="Add your content here...">Welcome to the Interactive Subway Surfers Game! As you play and achieve milestones, presentation slides will appear. Unlock content by collecting coins and reaching distance milestones!</textarea>
+                        </div>
+                    </div>
+                    <div id="slide-container-slides"></div>
+                </div>
+
+                <div class="slide-controls">
+                    <button class="control-btn" onclick="previousSlide()">← Previous</button>
+                    <div class="slide-indicator">
+                        <span id="current-slide">1</span> / <span id="total-slides">1</span>
+                    </div>
+                    <button class="control-btn" onclick="nextSlide()">Next →</button>
+                </div>
+
+                <div class="add-slide-section">
+                    <h4>Add New Presentation Slide</h4>
+                    <input type="text" id="slide-title" placeholder="Slide Title" class="input-field">
+                    <input type="number" id="slide-trigger" placeholder="Trigger at coins (e.g., 100)" class="input-field">
+                    <textarea id="slide-description" placeholder="Slide Content" class="input-field"></textarea>
+                    <button class="add-btn" onclick="addSlide()">+ Add Slide</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaderboard Section -->
+        <section id="leaderboard" class="section">
+            <div class="leaderboard-container">
+                <h3>🏆 High Scores & Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Total Games</h4>
+                        <p id="stat-games" class="stat-number">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Best Score</h4>
+                        <p id="stat-best-score" class="stat-number">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Total Coins</h4>
+                        <p id="stat-total-coins" class="stat-number">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Best Distance</h4>
+                        <p id="stat-best-distance" class="stat-number">0m</p>
+                    </div>
+                </div>
+
+                <div class="leaderboard-list">
+                    <h4>📊 Game History</h4>
+                    <div id="games-list" class="games-list">
+                        <p class="empty-message">No games played yet. Start playing to see your scores!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
